@@ -1,0 +1,11 @@
+﻿@model IEnumerable<Task2.Models.StudentModel>
+
+
+@foreach (var item in Model)
+{
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Name)
+        </td>
+    </tr>
+}
