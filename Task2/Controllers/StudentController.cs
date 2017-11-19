@@ -12,31 +12,48 @@ namespace Task2.Controllers
     {
         static List<StudentModel> students = new List<StudentModel>();
 
+        [HttpGet]
         public ViewResult Index(){
             return View(students.ToList());
          }
 
-        // GET: Student/Add?name=TEST
-        public string Add(string name)
+        [HttpPost]
+        // Student/Add?name=TEST
+        public IActionResult Add(string name)
         {
-            
-            students.Add(new StudentModel { Name = name });
-            return "Добавлен студент с именем " + name;
+            StudentModel model = new StudentModel { Name = name };
+            TryValidateModel(model);
+            if (ModelState.IsValid)
+            {
+                students.Add(new StudentModel { Name = name });
+                return Redirect("Index");
+            }
+            else return Redirect("Index");
         }
 
-        // GET: Student/Edit/5&name=TEST
-        public string Edit(int id, string name)
+        [HttpPut]
+        // Student/Edit/5&name=TEST
+        public IActionResult Edit(int id, string name)
         {
-            students[id].Name = name;
-            return "Изменено имя студента с id " + id + " на имя: " + name;
+            StudentModel model = new StudentModel { Name = name };
+            TryValidateModel(model);
+            if (ModelState.IsValid)
+            {
+                students[id].Name = name;
+                return Redirect("Index");
+            }
+            else {
+                return Redirect("Index");
+            }
         }
 
+        [HttpDelete]
         // GET: Student/Delete/5
-        public string Delete(int id)
+        public IActionResult Delete(int id)
         {
             string name = students[id].Name;
             students.RemoveAt(id);
-            return "Студент " + name + " удален";
+            return Redirect("Index");
         }
 
     }
